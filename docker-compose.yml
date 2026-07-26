@@ -6,7 +6,7 @@ services:
     env_file:
       - ./.env
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - benstack_drive:/var/lib/postgresql/data
 
 volumes:
-  - postgres_data
+  - benstack_drive
