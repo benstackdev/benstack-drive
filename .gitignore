@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+coverage/
+
+# Environment
+.env.*
+.env
+!.env.example
+
+# Logs
+logs
+*.log
+
+# TypeScript
+.tsbuildinfo
+
+# Vite
+vite.config.ts.timestamp-*
+.vite/
+
+# OS files (for macOS)
+.DS_Store
+
+# pnpm
+.pnpm-store
+
+# Optional ESLint cache
+.eslintcache

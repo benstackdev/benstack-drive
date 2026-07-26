@@ -1,0 +1,40 @@
+{
+  "name": "benstack-v1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev:web": "pnpm run --filter web dev",
+    "dev:api": "pnpm run --filter api dev",
+    "dev": "pnpm run dev:web & pnpm run dev:api",
+    "db:generate": "pnpm run --filter db generate",
+    "build:web": "pnpm run --filter web build",
+    "build:api": "pnpm run --filter api build",
+    "build": "pnpm run build:web & pnpm run build:api",
+    "db:migrate": "pnpm run --filter db migrate",
+    "db:push": "pnpm run --filter db push",
+    "db:studio": "pnpm run --filter db studio",
+    "shared:build": "pnpm run --filter shared build",
+    "docker-dev:up": "docker compose up -d",
+    "docker-dev:down": "docker compose down"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "^11.12.0",
+      "onFail": "download"
+    }
+  },
+  "type": "module",
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^26.1.1",
+    "eslint": "^10.7.0",
+    "prettier": "^3.9.5",
+    "typescript": "^7.0.2",
+    "typescript-eslint": "^8.63.0"
+  }
+}
