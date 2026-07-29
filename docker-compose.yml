@@ -5,8 +5,11 @@ services:
       - "5432:5432"
     env_file:
       - ./.env
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
     volumes:
-      - benstack_drive:/var/lib/postgresql/data
+      - benstack-drive:/var/lib/postgresql
 
 volumes:
-  - benstack_drive
+  benstack-drive:
+    name: "benstack-drive"
