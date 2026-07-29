@@ -10,6 +10,7 @@
     "db:generate": "pnpm run --filter db generate",
     "build:web": "pnpm run --filter web build",
     "build:api": "pnpm run --filter api build",
+    "build:shared": "pnpm run --filter shared build",
     "build": "pnpm run build:web & pnpm run build:api",
     "db:migrate": "pnpm run --filter db migrate",
     "db:push": "pnpm run --filter db push",
