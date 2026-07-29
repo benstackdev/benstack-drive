@@ -15,3 +15,9 @@ export const sessionValidation = async (c: Context, next: Next) => {
   c.set("session", session.session);
   await next();
 };
+
+export const sessionReturn = async (c: Context) => {
+  const user = c.get("user");
+  const userAuthenticated = (user !== null);
+  return c.json({ success: userAuthenticated, user });
+};

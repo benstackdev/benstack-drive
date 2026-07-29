@@ -2,7 +2,7 @@ import { serve } from '@hono/node-server';
 import { Hono } from 'hono';
 import { auth } from "db";
 import { cors } from 'hono/cors';
-import { sessionValidation } from './controllers/auth-controller.js';
+import { sessionReturn, sessionValidation } from './controllers/auth-controller.js';
 
 const app = new Hono<{
   Variables: {
@@ -29,6 +29,14 @@ app.on(["POST", "GET"], "/api/auth/*", (c) => {
 
 app.get('/', (c) => {
   return c.text('Hello Hono!');
+});
+
+// Request to return valid session
+app.get('/api/auth-user', sessionReturn);
+
+// Fallback route
+app.get('/*', (c) => {
+  return c.text("404 - Cannot access requested resource");
 });
 
 serve({
