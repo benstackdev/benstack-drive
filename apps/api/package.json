@@ -13,7 +13,8 @@
     "better-auth": "^1.6.25",
     "db": "workspace:*",
     "dotenv": "^17.4.2",
-    "hono": "^4.12.28"
+    "hono": "^4.12.28",
+    "shared": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^20.11.17",
