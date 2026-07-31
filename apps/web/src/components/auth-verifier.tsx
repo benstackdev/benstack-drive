@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useAuth } from "../contexts/auth-provider";
 import { useNavigate } from "react-router";
 
 export default function AuthVerifier({ children }) {
   const navigate = useNavigate();
-  const [isVerified, setIsVerified] = useState<boolean | null>(null);
-  const { setSessionData } = useAuth();
+  const { sessionData, setSessionData } = useAuth();
 
   useEffect(() => {
     const fetchSessionData = async () => {
@@ -18,17 +17,16 @@ export default function AuthVerifier({ children }) {
       }
 
       const result = await response.json();
-      setIsVerified(result.success);
-      if (isVerified) setSessionData(result.data);
+      setSessionData(result.data);
     };
 
-    if (isVerified === null) fetchSessionData();
-  }, [isVerified, setIsVerified, setSessionData]);
+    fetchSessionData();
+  }, [setSessionData]);
 
   useEffect(() => {
-    if (isVerified) navigate("/");
+    if (sessionData !== null) navigate("/");
     else navigate("/sign-in");
-  }, [isVerified, navigate]);
+  }, [sessionData, navigate]);
 
   return children;
 }
