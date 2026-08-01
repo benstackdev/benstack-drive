@@ -30,8 +30,7 @@ function Signin() {
       email: formData.email,
       password: formData.password,
       fetchOptions: {
-        onSuccess(ctx) {
-          console.log(ctx.response.ok);
+        onSuccess() {
           navigate("/");
         },
         onError(ctx) {

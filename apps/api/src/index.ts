@@ -32,7 +32,7 @@ app.get('/', (c) => {
 });
 
 // Request to return valid session
-app.get('/api/auth-user', sessionReturn);
+app.get('/api/auth-user', sessionValidation, sessionReturn);
 
 // Fallback route
 app.get('/*', (c) => {

@@ -6,8 +6,8 @@ type WebUserSessionType = {
 };
 
 type AuthProviderContextType = {
-  sessionData: WebUserSessionType,
-  setSessionData: (_data: WebUserSessionType) => void;
+  sessionData: WebUserSessionType | null,
+  setSessionData: (_data: WebUserSessionType) => void,
 };
 
 const AuthProviderContext = createContext<AuthProviderContextType | null>(null);
