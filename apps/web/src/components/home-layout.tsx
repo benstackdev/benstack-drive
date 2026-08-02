@@ -1,7 +1,9 @@
-import { Link, Outlet } from "react-router";
+import { Outlet } from "react-router";
 import { authClient } from "@/lib/auth-client";
 import { SidebarMain } from "./sidebar/sidebar-main";
 import { SidebarProvider, SidebarTrigger } from "./ui/sidebar";
+import { Welcome } from "./welcome";
+import { HomeFooter } from "./home-footer";
 
 function HomeLayout() {
   const { data: session, isPending, error } = authClient.useSession();
@@ -21,12 +23,10 @@ function HomeLayout() {
             </main>
           </SidebarProvider >)
           :
-          (
-            <div className="">
-              <p>No session found</p>
-              <Link to="/sign-in">Click here to sign in</Link>
-            </div>
-          )
+          <div className="flex min-h-screen flex-col justify-between">
+            <Welcome />
+            <HomeFooter />
+          </div>
       }
     </>
   );
