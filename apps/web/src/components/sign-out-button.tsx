@@ -1,12 +1,13 @@
 import { Button } from "./ui/button";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "./ui/alert-dialog";
-import { authClient } from "../lib/auth-client";
+import { authClient } from "@/lib/auth-client";
+import { LogOut } from "lucide-react";
 
 function SignoutButton() {
   return (
     <AlertDialog>
       <AlertDialogTrigger render={
-        <Button variant="destructive">Sign Out</Button>
+        <Button variant="destructive"><LogOut /></Button>
       } />
       <AlertDialogContent>
         <AlertDialogHeader>

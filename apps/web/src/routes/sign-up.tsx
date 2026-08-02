@@ -1,15 +1,15 @@
-import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from "../components/ui/card";
+import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import * as z from "zod";
 import { useForm, type SubmitHandler, Controller } from "react-hook-form";
 import { userSchema } from "shared";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Field, FieldError, FieldLabel } from "../components/ui/field";
-import { Input } from "../components/ui/input";
-import { Button } from "../components/ui/button";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router";
-import { authClient } from "../lib/auth-client";
+import { authClient } from "@/lib/auth-client";
 import { useState } from "react";
-import AuthError from "../components/auth-error";
+import AuthError from "@/components/auth-error";
 
 function Signup() {
   const navigate = useNavigate();

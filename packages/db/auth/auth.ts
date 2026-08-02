@@ -10,7 +10,7 @@ export const auth = betterAuth({
       user, session, account, verification
     }
   }),
-  trustedOrigins: ['http://localhost:5173'],
+  trustedOrigins: [process.env.WEB_URL!],
   emailAndPassword: {
     enabled: true
   }

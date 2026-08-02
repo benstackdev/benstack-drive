@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router";
-import { authClient } from "../lib/auth-client";
+import { authClient } from "@/lib/auth-client";
 import { createContext, useEffect } from "react";
 
 type WebUserSessionType = {

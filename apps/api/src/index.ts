@@ -13,7 +13,7 @@ const app = new Hono<{
 
 app.use('/*',
   cors({
-    origin: ['http://localhost:5173', 'http://localhost:8080'],
+    origin: [process.env.WEB_URL!, process.env.API_URL!],
     allowHeaders: ["Content-Type", "Authorization"],
     allowMethods: ["POST", "GET", "PUT", "DELETE", "OPTIONS"],
     exposeHeaders: ["Content-Length"],
@@ -41,7 +41,7 @@ app.get('/*', (c) => {
 
 serve({
   fetch: app.fetch,
-  port: 8080
+  port: Number(process.env.API_PORT)
 }, (info) => {
-  console.log(`Server is running on http://localhost:${info.port}`);
+  console.log(`Server is running on ${process.env.API_URL}`);
 });

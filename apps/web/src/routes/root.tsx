@@ -1,5 +1,5 @@
 import { Outlet } from "react-router";
-import { ThemeProvider } from "../contexts/theme-provider";
+import { ThemeProvider } from "@/contexts/theme-provider";
 
 function Root() {
 	return (
