@@ -3,6 +3,7 @@ import { Hono } from 'hono';
 import { auth } from "db";
 import { cors } from 'hono/cors';
 import { sessionReturn, sessionValidation } from './controllers/auth-controller.js';
+import { driveRouter } from './routers/drive-router.js';
 
 const app = new Hono<{
   Variables: {
@@ -38,6 +39,9 @@ app.get('/api/auth-user', sessionValidation, sessionReturn);
 app.get('/*', (c) => {
   return c.text("404 - Cannot access requested resource");
 });
+
+// Define router for all drive-related routes
+app.route('/drive', driveRouter);
 
 serve({
   fetch: app.fetch,

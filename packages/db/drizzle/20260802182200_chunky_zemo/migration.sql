@@ -1,0 +1,1 @@
+ALTER TABLE "file_entity" ADD COLUMN "name" text NOT NULL;
