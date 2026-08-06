@@ -1,0 +1,1 @@
+ALTER TABLE "directory_entity" ALTER COLUMN "parent_id" SET NOT NULL;

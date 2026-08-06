@@ -32,6 +32,9 @@ app.get('/', (c) => {
   return c.text('Hello Hono!');
 });
 
+// Define router for all drive-related routes
+app.route('/drive', driveRouter);
+
 // Request to return valid session
 app.get('/api/auth-user', sessionValidation, sessionReturn);
 
@@ -39,9 +42,6 @@ app.get('/api/auth-user', sessionValidation, sessionReturn);
 app.get('/*', (c) => {
   return c.text("404 - Cannot access requested resource");
 });
-
-// Define router for all drive-related routes
-app.route('/drive', driveRouter);
 
 serve({
   fetch: app.fetch,

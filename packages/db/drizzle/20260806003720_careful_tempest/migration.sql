@@ -1,0 +1,2 @@
+ALTER TABLE "directory_entity" RENAME CONSTRAINT "parent_fk" TO "directory_entity_parent_id_directory_entity_id_fkey";--> statement-breakpoint
+ALTER TABLE "directory_entity" ALTER COLUMN "parent_id" DROP NOT NULL;

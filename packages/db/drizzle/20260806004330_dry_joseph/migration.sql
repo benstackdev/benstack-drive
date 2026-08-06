@@ -1,0 +1,1 @@
+ALTER TABLE "file_entity" ALTER COLUMN "dir_id" SET DATA TYPE uuid USING "dir_id"::uuid;

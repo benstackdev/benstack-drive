@@ -2,16 +2,20 @@ import type { user } from "../schemas/auth-schema.js";
 import { db } from "../client.js";
 import { FileEntity } from "../schemas/file-schema.js";
 import { eq, and } from "drizzle-orm/pg-core/expressions";
+import { DirectoryEntity } from "../schemas/directory-schema.js";
 
 type UserType = typeof user.$inferInsert;
 type UserIdType = UserType["id"];
+
 type FileEntityType = typeof FileEntity.$inferInsert;
 type NewFileType = {
   data: FileEntityType["data"],
   name: FileEntityType["name"],
   path: FileEntityType["path"],
-  isDirectory: FileEntityType["isDirectory"],
+  dirId: FileEntityType["dirId"],
 };
+
+type DirectoryEntityType = typeof DirectoryEntity.$inferInsert;
 
 export const insertNewFile = async (
   userId: UserIdType,
@@ -23,7 +27,7 @@ export const insertNewFile = async (
       data: newFile.data,
       name: newFile.name,
       path: newFile.path,
-      isDirectory: newFile.isDirectory
+      dirId: newFile.dirId
     }).returning();
 
     return file;
@@ -32,24 +36,57 @@ export const insertNewFile = async (
   }
 };
 
-export const selectFile = async (
+export const insertNewDir = async (
   userId: UserIdType,
-  path: FileEntityType["path"],
-  name: FileEntityType["name"]
+  isRoot: boolean = false,
+  parentId: DirectoryEntityType["parentId"],
+  name: DirectoryEntityType["name"]
 ) => {
   try {
-    if (!path) return;
+    const dir = await db.insert(DirectoryEntity).values({
+      userId,
+      isRoot,
+      parentId,
+      name
+    }).returning();
 
-    const readFile = await db.select()
+    return dir;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const selectFile = async (
+  userId: UserIdType,
+  dirId: FileEntityType["id"]
+) => {
+  try {
+    if (!dirId) return;
+
+    const files = await db.select()
       .from(FileEntity)
       .where(and(
         eq(FileEntity.userId, userId),
-        eq(FileEntity.path, path),
-        eq(FileEntity.name, name)
+        eq(FileEntity.id, dirId)
       ));
-    console.log(readFile);
+    console.log(files);
 
-    return readFile[0];
+    return files;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const selectRootDir = async (userId: UserIdType) => {
+  try {
+    const rootDir = await db.select()
+      .from(DirectoryEntity)
+      .where(and(
+        eq(DirectoryEntity.userId, userId),
+        eq(DirectoryEntity.isRoot, true)
+      ));
+
+    return (rootDir.length > 0) ? rootDir : null;
   } catch (error) {
     throw error;
   }

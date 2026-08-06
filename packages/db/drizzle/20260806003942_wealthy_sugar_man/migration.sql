@@ -1,0 +1,1 @@
+ALTER TABLE "directory_entity" ALTER COLUMN "parent_id" SET DATA TYPE uuid USING "parent_id"::uuid;

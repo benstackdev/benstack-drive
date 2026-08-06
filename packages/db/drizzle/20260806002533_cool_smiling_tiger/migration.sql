@@ -1,0 +1,1 @@
+ALTER TABLE "directory_entity" RENAME CONSTRAINT "directory_fk" TO "parent_fk";

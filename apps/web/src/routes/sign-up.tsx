@@ -10,6 +10,7 @@ import { Link, useNavigate } from "react-router";
 import { authClient } from "@/lib/auth-client";
 import { useState } from "react";
 import AuthError from "@/components/auth-error";
+import { createRootDirectory } from "@/lib/create-root-directory";
 
 function Signup() {
   const navigate = useNavigate();
@@ -28,20 +29,29 @@ function Signup() {
   });
 
   const onSubmit: SubmitHandler<z.infer<typeof userSchema.WebSignupForm>> = async (formData) => {
+    let signUpSuccess = false;
     await authClient.signUp.email({
       name: formData.username,
       email: formData.email,
       password: formData.password,
       fetchOptions: {
-        onSuccess(ctx) {
-          console.log(ctx.response.ok);
-          navigate("/sign-in");
+        onSuccess() {
+          signUpSuccess = true;
         },
         onError(ctx) {
           setSignUpError(ctx.error.message);
         }
       }
     });
+
+    if (signUpSuccess) {
+      const result = await createRootDirectory();
+      if (result.success) {
+        navigate("/");
+      } else {
+        setSignUpError(result.success);
+      }
+    }
   };
 
   return (
