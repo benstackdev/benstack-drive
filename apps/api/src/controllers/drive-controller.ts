@@ -12,6 +12,7 @@ export const driveFileTooLarge = (c: Context) => {
 export const driveNewFilePost = async (c: Context) => {
   const body = await c.req.parseBody();
   const file = body['file'];
+  const dirId = body['dir'];
 
   const user = c.get("user");
 
@@ -19,11 +20,15 @@ export const driveNewFilePost = async (c: Context) => {
     return c.json({ status: 400, error: "Data must be a file" });
   }
 
+  if (!dirId || typeof dirId !== "string") {
+    return c.json({ status: 400, error: "No directory provided" });
+  }
+
   const newFile = await driveQuery.insertNewFile(user.id, {
     data: Buffer.from(await file.arrayBuffer()),
     name: file.name,
     path: "/",
-    dirId: "" //! Change, read from req form data
+    dirId
   });
 
   if (newFile) {
@@ -37,16 +42,27 @@ export const driveFileGet = async (c: Context) => {
   const dirId = c.req.param('dirId');
   const fileName = c.req.query('fileName');
 
+  if (!dirId) {
+    return c.json({ success: false, message: "No directory id defined in request parameter." });
+  }
+
   const user = c.get("user");
 
-  const files = await driveQuery.selectFile(user.id, dirId);
+  const files = await driveQuery.selectAllFilesInDir(user.id, dirId);
+  const subDirs = await driveQuery.selectAllDirsInDir(user.id, dirId);
 
   if (files) {
     if (fileName) {
       const queriedFile = files.filter((file) => file.name === fileName);
-      return c.json({ success: true, data: queriedFile });
+      return c.json({
+        success: true,
+        data: queriedFile
+      });
     }
-    return c.json({ success: true, data: files });
+    return c.json({
+      success: true,
+      data: { subDirs, files }
+    });
   } else {
     throw new HTTPException(404, { message: "Requested file not found" });
   }
@@ -58,6 +74,10 @@ export const driveNewDirPost = async (c: Context) => {
   const name = body['name'];
 
   const user = c.get("user");
+
+  if (!user) {
+    throw new HTTPException(401, { message: "Unauthorized request" });
+  }
 
   if (typeof parentId !== "string" || typeof name !== "string") {
     throw new HTTPException(400, { message: "Bad form data; parentId and name need to be strings." });
@@ -92,3 +112,55 @@ export const driveInitRootPost = async (c: Context) => {
 
   return c.json({ success: false, message: "Root directory already exists" });
 };
+
+export const driveFileUpdatePut = async (c: Context) => {
+  const user = c.get("user");
+  if (!user) {
+    throw new HTTPException(401, { message: "Unauthorized request" });
+  }
+
+  const dirFromId = c.req.param('dirId');
+  const fileName = c.req.query("fileName");
+  const dirToId = c.req.query("dirToId");
+
+  if (dirFromId && fileName && dirToId) {
+    const file = await driveQuery.selectFileByName(user.id, dirFromId, fileName);
+    const dirToExists = await driveQuery.selectDirById(user.id, dirToId);
+
+    if (!file || !file.id) {
+      return c.json({ success: false, message: `File with name ${fileName} could not be found in the directory given.` });
+    }
+
+    if (!dirToExists) {
+      return c.json({ success: false, message: "Directory to move file to could not be found." });
+    }
+
+    const updatedDir = await driveQuery.updateFileMove(user.id, file.id, dirToId);
+
+    if (updatedDir && updatedDir.id) {
+      return c.json({ success: true, data: updatedDir.id });
+    } else {
+      return c.json({ success: false, message: "File was not moved." });
+    }
+
+  } else {
+    if (!dirFromId) {
+      return c.json({ success: false, message: "No directory parameter provided." });
+    } else if (!fileName) {
+      return c.json({ success: false, message: "No file name given." });
+    } else {
+      return c.json({ success: false, message: "No directory to move to given." });
+    }
+  }
+}
+
+/*
+  d root:
+    d Documents:
+      d Journal:
+        f BenStackLogo.svg
+        f test.txt
+        f favicon.ico
+      f test.txt
+      f Profile Picture.png
+*/
