@@ -49,10 +49,6 @@ export const insertNewDir = async (
   name: DirectoryEntityType["name"]
 ) => {
   try {
-    const dirExists = await selectDirByName(userId, parentId, name);
-    // TODO: Return that there was a collision
-    if (dirExists) return;
-
     const dir = await db.insert(DirectoryEntity).values({
       userId,
       isRoot,
@@ -61,6 +57,26 @@ export const insertNewDir = async (
     }).returning();
 
     return dir;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const selectFileById = async (
+  userId: UserIdType,
+  id: FileEntityType["id"]
+) => {
+  try {
+    if (!id) return;
+
+    const file = await db.select()
+      .from(FileEntity)
+      .where(and(
+        eq(FileEntity.userId, userId),
+        eq(FileEntity.id, id)
+      ));
+
+    return file[0];
   } catch (error) {
     throw error;
   }
@@ -80,11 +96,9 @@ export const selectFileByName = async (
         eq(FileEntity.userId, userId),
         eq(FileEntity.dirId, dirId),
         eq(FileEntity.name, name)
-      ))
-      .limit(1);
+      ));
 
     if (file[0]) return file[0];
-    return;
   } catch (error) {
     throw error;
   }
@@ -193,17 +207,128 @@ export const updateFileMove = async (
   try {
     if (!id) return;
 
-    const updatedDir = await db.update(FileEntity)
+    const updatedFile = await db.update(FileEntity)
       .set({ dirId: dirTo })
       .where(and(
         eq(FileEntity.userId, userId),
         eq(FileEntity.id, id)
       ))
-      .returning({ id: FileEntity.dirId });
+      .returning();
 
-    if (updatedDir[0] && updatedDir[0].id === dirTo) return updatedDir[0];
+    if (updatedFile[0] && updatedFile[0].dirId === dirTo) return updatedFile[0];
 
     return;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updateFileRename = async (
+  userId: UserIdType,
+  id: FileEntityType["id"],
+  newName: FileEntityType["name"]
+) => {
+  try {
+    if (!id) return;
+
+    const updatedFile = await db.update(FileEntity)
+      .set({ name: newName })
+      .where(and(
+        eq(FileEntity.userId, userId),
+        eq(FileEntity.id, id)
+      ))
+      .returning();
+
+    if (updatedFile[0] && updatedFile[0].name === newName) return updatedFile[0];
+
+    return;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updateDirMove = async (
+  userId: UserIdType,
+  id: DirectoryEntityType["id"],
+  dirToId: DirectoryEntityType["id"]
+) => {
+  try {
+    if (!id || !dirToId) return;
+
+    const updatedDir = await db.update(DirectoryEntity)
+      .set({ parentId: dirToId })
+      .where(and(
+        eq(DirectoryEntity.userId, userId),
+        eq(DirectoryEntity.id, id)
+      ))
+      .returning();
+
+    if (updatedDir[0] && updatedDir[0].parentId === dirToId) return updatedDir[0];
+
+    return;
+  } catch (error) {
+    throw error;
+  }
+
+};
+
+export const updateDirRename = async (
+  userId: UserIdType,
+  id: DirectoryEntityType["id"],
+  newName: DirectoryEntityType["name"]
+) => {
+  try {
+    if (!id) return;
+
+    const updatedDir = await db.update(DirectoryEntity)
+      .set({ name: newName })
+      .where(and(
+        eq(DirectoryEntity.userId, userId),
+        eq(DirectoryEntity.id, id)
+      ))
+      .returning();
+
+    if (updatedDir[0]) return updatedDir[0];
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deleteFileById = async (
+  userId: UserIdType,
+  id: FileEntityType["id"]
+) => {
+  try {
+    if (!id) return;
+
+    const deletedFile = await db.delete(FileEntity)
+      .where(and(
+        eq(FileEntity.userId, userId),
+        eq(FileEntity.id, id)
+      ))
+      .returning();
+
+    return deletedFile[0];
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deleteDirById = async (
+  userId: UserIdType,
+  id: DirectoryEntityType["id"]
+) => {
+  try {
+    if (!id) return;
+
+    const deletedDir = await db.delete(DirectoryEntity)
+      .where(and(
+        eq(DirectoryEntity.userId, userId),
+        eq(DirectoryEntity.id, id)
+      ))
+      .returning();
+
+    return deletedDir[0];
   } catch (error) {
     throw error;
   }

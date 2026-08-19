@@ -1,0 +1,1 @@
+ALTER TABLE "directory_entity" DROP CONSTRAINT "directory_entity_parent_id_directory_entity_id_fkey", ADD CONSTRAINT "directory_entity_parent_id_directory_entity_id_fkey" FOREIGN KEY ("parent_id") REFERENCES "directory_entity"("id") ON DELETE CASCADE;
