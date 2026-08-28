@@ -7,8 +7,6 @@ export const DirectoryEntity = pgTable("directory_entity", {
   isRoot: boolean().notNull().default(false),
   name: text("name").notNull(),
   parentId: uuid("parent_id").references((): AnyPgColumn => DirectoryEntity.id, { onDelete: "cascade" }),
-  path: text("path").notNull().default("/"),
-  level: integer("level").notNull().default(1),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   modifiedAt: timestamp("modified_at").notNull().defaultNow()
 });

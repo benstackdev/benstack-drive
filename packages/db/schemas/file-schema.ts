@@ -10,8 +10,6 @@ export const FileEntity = pgTable("file_entity", {
   }),
   data: bytea("data").notNull(),
   name: text("name").notNull(),
-  path: text("path").notNull().default("/"),
-  level: integer("level").notNull().default(1),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   modifiedAt: timestamp("modified_at").notNull().defaultNow(),
   isStarred: boolean("is_starred").default(false),
