@@ -1,14 +1,15 @@
 import { Hono } from "hono";
 import { bodyLimit } from "hono/body-limit";
 import { driveFileUpdatePut, driveFileGet, driveFileTooLarge, driveNewFilePost, driveFileDelete } from "../controllers/drive-file-controller.js";
-import { driveInitRootPost, driveNewDirPost, driveDirUpdatePut, driveDirDelete } from "../controllers/drive-dir-controller.js";
+import { driveInitRootPost, driveNewDirPost, driveDirUpdatePut, driveDirDelete, driveDirRootGet } from "../controllers/drive-dir-controller.js";
 import type { Context } from "hono";
 
 export const driveRouter = new Hono();
 
 // Get all files in a directory OR get a specific file by naming it
 driveRouter.get('/:dirId', driveFileGet);
-driveRouter.get('/dir/:dirId');
+driveRouter.get('/dir/root');
+driveRouter.get('/dir/:dirId', driveDirRootGet);
 
 driveRouter.post('/',
   bodyLimit({

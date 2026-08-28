@@ -4,6 +4,22 @@ import { HTTPException } from "hono/http-exception";
 import { success } from "zod";
 import { resolveDirDuplicateName } from "../utils/resolve-dir-duplicate-name.js";
 
+export const driveDirRootGet = async (c: Context) => {
+  const user = c.get("user");
+
+  if (!user) {
+    throw new HTTPException(401, { message: "Unauthorized request" });
+  }
+
+  const rootDir = await driveQuery.selectRootDir(user.id);
+
+  if (rootDir && rootDir[0]) {
+    return c.json({ success: true, data: rootDir[0].id });
+  } else {
+    return c.json({ success: false, message: `Could not fetch root directory for ${user.name}` });
+  }
+};
+
 export const driveNewDirPost = async (c: Context) => {
   const body = await c.req.parseBody();
   const parentId = body['parent'];

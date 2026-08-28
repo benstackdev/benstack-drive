@@ -11,7 +11,6 @@ type FileEntityType = typeof FileEntity.$inferInsert;
 type NewFileType = {
   data: FileEntityType["data"],
   name: FileEntityType["name"],
-  path: FileEntityType["path"],
   dirId: FileEntityType["dirId"],
 };
 
@@ -32,7 +31,6 @@ export const insertNewFile = async (
       userId,
       data: newFile.data,
       name: newFile.name,
-      path: newFile.path,
       dirId: newFile.dirId
     }).returning();
 
