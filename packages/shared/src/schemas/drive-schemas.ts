@@ -8,13 +8,18 @@ export const driveDir = z.object({
   modifiedAt: z.iso.datetime()
 });
 
+export const driveFileData = z.object({
+  type: z.string(),
+  data: z.array(z.number())
+});
+
 export const driveFile = z.object({
   id: z.uuid(),
   dirId: z.uuid(),
-  data: z.file().max(1_000_000),
+  data: driveFileData,
   name: z.string(),
   createdAt: z.iso.datetime(),
-  modifiedAd: z.iso.datetime(),
+  modifiedAt: z.iso.datetime(),
   isStarred: z.boolean(),
   isTrash: z.boolean()
 });

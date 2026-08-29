@@ -1,0 +1,1 @@
+export const h1Styles = "text-xl font-semibold";

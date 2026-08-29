@@ -6,13 +6,20 @@ export declare const driveDir: z.ZodObject<{
     createdAt: z.ZodISODateTime;
     modifiedAt: z.ZodISODateTime;
 }, z.core.$strip>;
+export declare const driveFileData: z.ZodObject<{
+    type: z.ZodString;
+    data: z.ZodArray<z.ZodNumber>;
+}, z.core.$strip>;
 export declare const driveFile: z.ZodObject<{
     id: z.ZodUUID;
     dirId: z.ZodUUID;
-    data: z.ZodFile;
+    data: z.ZodObject<{
+        type: z.ZodString;
+        data: z.ZodArray<z.ZodNumber>;
+    }, z.core.$strip>;
     name: z.ZodString;
     createdAt: z.ZodISODateTime;
-    modifiedAd: z.ZodISODateTime;
+    modifiedAt: z.ZodISODateTime;
     isStarred: z.ZodBoolean;
     isTrash: z.ZodBoolean;
 }, z.core.$strip>;
@@ -27,10 +34,13 @@ export declare const driveDirContents: z.ZodObject<{
     files: z.ZodArray<z.ZodObject<{
         id: z.ZodUUID;
         dirId: z.ZodUUID;
-        data: z.ZodFile;
+        data: z.ZodObject<{
+            type: z.ZodString;
+            data: z.ZodArray<z.ZodNumber>;
+        }, z.core.$strip>;
         name: z.ZodString;
         createdAt: z.ZodISODateTime;
-        modifiedAd: z.ZodISODateTime;
+        modifiedAt: z.ZodISODateTime;
         isStarred: z.ZodBoolean;
         isTrash: z.ZodBoolean;
     }, z.core.$strip>>;

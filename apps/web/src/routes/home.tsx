@@ -1,10 +1,17 @@
-import { HomeFooter } from "@/components/home-footer";
+import { DriveContent } from "@/components/drive/drive-content";
+import { DriveFooter } from "@/components/drive/drive-footer";
+import { DriveHeader } from "@/components/drive/drive-header";
+import { DriveSearchbar } from "@/components/drive/drive-searchbar";
 
 function Home() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-between">
-      <h1>File nav goes here</h1>
-      <HomeFooter />
+    <div className="px-4 flex flex-1 min-h-screen flex-col justify-between">
+      <div className="flex flex-col gap-2">
+        <DriveHeader />
+        <DriveSearchbar />
+        <DriveContent />
+      </div>
+      <DriveFooter />
     </div>
   );
 }
