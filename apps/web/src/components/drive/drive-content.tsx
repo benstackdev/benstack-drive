@@ -1,28 +1,57 @@
 import driveClient from "@/api-client/drive-client";
 import { h1Styles } from "@/lib/styles/heading-styles";
 import { useEffect, useState } from "react";
+import * as z from "zod";
+import { driveSchema } from "shared";
+import { DriveDirectory } from "./drive-directory";
+import { DriveFile } from "./drive-file";
+import { Separator } from "../ui/separator";
 
 export function DriveContent() {
-  const [data, setData] = useState(null);
+  const [dirs, setDirs] = useState<z.infer<typeof driveSchema.driveDir>[] | null>(null);
+  const [files, setFiles] = useState<z.infer<typeof driveSchema.driveFile>[] | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       const rootDirId = await driveClient.getRootId();
       if (rootDirId) {
-        setData(await driveClient.getDirContent(rootDirId));
+        const rawData = await driveClient.getDirContent(rootDirId);
+        setDirs(rawData.subDirs);
+        setFiles(rawData.files);
       }
     };
 
-    if (!data) fetchData();
+    if (!dirs && !files) fetchData();
   }, []);
 
   return (
     <>
       <div className="py-2">
-        <h1 className={h1Styles}>Drive Content</h1>
+        <h1 className={h1Styles}>All Files</h1>
       </div>
       {/* Fetch files/directories */}
-      <pre>{JSON.stringify(data, null, 2)}</pre>
+      <div className="flex flex-col gap-4">
+        <div className="grid grid-cols-2 pb-2 border-b-2">
+          <span className="text-gray-400 font-semibold">File Name</span>
+          <span className="text-gray-400 font-semibold">File Created</span>
+        </div>
+        {
+          dirs ? dirs.map((dir) => (
+            <>
+              <DriveDirectory key={dir.id} directory={dir} />
+              <Separator />
+            </>
+          )) : null
+        }
+        {
+          files ? files.map((file) => (
+            <>
+              <DriveFile key={file.id} file={file} />
+              <Separator />
+            </>
+          )) : null
+        }
+      </div>
     </>
   );
 }
