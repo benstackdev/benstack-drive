@@ -1,5 +1,10 @@
 import * as z from "zod";
 
+export const driveNewFileForm = z.object({
+  file: z.file().max(1_000_000),
+  dir: z.uuid()
+});
+
 export const driveDir = z.object({
   id: z.uuid(),
   name: z.string(),
