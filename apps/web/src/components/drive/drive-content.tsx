@@ -37,18 +37,18 @@ export function DriveContent() {
         </div>
         {
           dirs ? dirs.map((dir) => (
-            <>
-              <DriveDirectory key={dir.id} directory={dir} />
+            <div key={dir.id}>
+              <DriveDirectory directory={dir} />
               <Separator />
-            </>
+            </div>
           )) : null
         }
         {
           files ? files.map((file) => (
-            <>
-              <DriveFile key={file.id} file={file} />
+            <div key={file.id}>
+              <DriveFile file={file} />
               <Separator />
-            </>
+            </div>
           )) : null
         }
       </div>

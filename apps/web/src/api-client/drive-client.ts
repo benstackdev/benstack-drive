@@ -34,6 +34,27 @@ class DriveClient {
 
     return data;
   }
+
+  async postNewFile(newFile: File) {
+    const formData = new FormData();
+
+    formData.append("file", newFile);
+    formData.append("dir", "13312492-f592-44a0-a2e6-f809b48a0d64");
+
+    const response = await fetch(`${apiURL}/drive`, {
+      method: "POST",
+      credentials: "include",
+      body: formData
+    });
+
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`);
+    }
+
+    const result = await response.json();
+
+    return result.success;
+  }
 }
 
 const driveClient = new DriveClient();

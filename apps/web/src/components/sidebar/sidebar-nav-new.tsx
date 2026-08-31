@@ -1,5 +1,6 @@
 import { FilePlusCorner, FolderPlus } from "lucide-react";
 import { SidebarGroup, SidebarGroupContent, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
+import { NewFileDialog } from "./sidebar-new-file";
 
 export function SidebarNavNew() {
   return (
@@ -7,10 +8,7 @@ export function SidebarNavNew() {
       <SidebarGroupContent className="flex items-center gap-2">
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton>
-              <FilePlusCorner />
-              New File
-            </SidebarMenuButton>
+            <NewFileDialog />
           </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton>

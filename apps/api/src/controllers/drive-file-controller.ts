@@ -32,7 +32,6 @@ export const driveNewFilePost = async (c: Context) => {
   const newFile = await driveQuery.insertNewFile(user.id, {
     data: Buffer.from(await file.arrayBuffer()),
     name: newFileName,
-    path: "/",
     dirId
   });
 
