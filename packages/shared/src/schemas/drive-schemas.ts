@@ -1,8 +1,7 @@
 import * as z from "zod";
 
 export const driveNewFileForm = z.object({
-  file: z.file().max(1_000_000),
-  dir: z.uuid()
+  file: z.any().refine((files) => files[0]?.size <= 1_000_000, "File must be < 1 MB")
 });
 
 export const driveDir = z.object({

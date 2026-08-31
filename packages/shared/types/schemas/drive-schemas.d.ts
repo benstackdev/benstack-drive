@@ -1,7 +1,6 @@
 import * as z from "zod";
 export declare const driveNewFileForm: z.ZodObject<{
-    file: z.ZodFile;
-    dir: z.ZodUUID;
+    file: z.ZodAny;
 }, z.core.$strip>;
 export declare const driveDir: z.ZodObject<{
     id: z.ZodUUID;
