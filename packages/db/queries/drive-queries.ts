@@ -3,6 +3,7 @@ import { db } from "../client.js";
 import { FileEntity } from "../schemas/file-schema.js";
 import { eq, and } from "drizzle-orm/pg-core/expressions";
 import { DirectoryEntity } from "../schemas/directory-schema.js";
+import { sql } from "drizzle-orm";
 
 type UserType = typeof user.$inferInsert;
 type UserIdType = UserType["id"];
@@ -206,7 +207,7 @@ export const updateFileMove = async (
     if (!id) return;
 
     const updatedFile = await db.update(FileEntity)
-      .set({ dirId: dirTo })
+      .set({ dirId: dirTo, modifiedAt: sql`now()` })
       .where(and(
         eq(FileEntity.userId, userId),
         eq(FileEntity.id, id)
@@ -230,7 +231,7 @@ export const updateFileRename = async (
     if (!id) return;
 
     const updatedFile = await db.update(FileEntity)
-      .set({ name: newName })
+      .set({ name: newName, modifiedAt: sql`now()` })
       .where(and(
         eq(FileEntity.userId, userId),
         eq(FileEntity.id, id)
@@ -254,7 +255,7 @@ export const updateDirMove = async (
     if (!id || !dirToId) return;
 
     const updatedDir = await db.update(DirectoryEntity)
-      .set({ parentId: dirToId })
+      .set({ parentId: dirToId, modifiedAt: sql`now()` })
       .where(and(
         eq(DirectoryEntity.userId, userId),
         eq(DirectoryEntity.id, id)
@@ -279,7 +280,7 @@ export const updateDirRename = async (
     if (!id) return;
 
     const updatedDir = await db.update(DirectoryEntity)
-      .set({ name: newName })
+      .set({ name: newName, modifiedAt: sql`now()` })
       .where(and(
         eq(DirectoryEntity.userId, userId),
         eq(DirectoryEntity.id, id)
