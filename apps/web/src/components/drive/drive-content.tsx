@@ -38,9 +38,11 @@ export function DriveContent() {
       </div>
       {/* Fetch files/directories */}
       <div className="flex flex-col gap-4">
-        <div className="grid grid-cols-2 pb-2 border-b-2">
-          <span className="text-gray-400 font-semibold">File Name</span>
-          <span className="text-gray-400 font-semibold">File Created</span>
+        <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 pb-2 border-b-2 gap-x-4">
+          <span className="text-gray-400 font-semibold">Name</span>
+          <span className="text-gray-400 font-semibold">Last Modified</span>
+          <span className="hidden md:block text-gray-400 font-semibold">Created</span>
+          <span className="hidden xl:block text-gray-400 font-semibold">Size</span>
         </div>
         {
           dirs ? dirs.map((dir) => (
