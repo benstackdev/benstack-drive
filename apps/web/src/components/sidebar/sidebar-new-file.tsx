@@ -14,10 +14,14 @@ export function NewFileDialog() {
   return (
     <Dialog>
       <DialogTrigger
-        render={<Button variant="outline">
-          <FilePlusCorner />
-          New File
-        </Button>} />
+        render={
+          <Button
+            className="w-full"
+            variant="outline">
+            <FilePlusCorner />
+            New File
+          </Button>
+        } />
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Upload New File</DialogTitle>

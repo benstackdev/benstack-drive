@@ -55,6 +55,27 @@ class DriveClient {
 
     return result.success;
   }
+
+  async postNewDir(newDirName: string, parentDirId: string) {
+    const formData = new FormData();
+
+    formData.append("name", newDirName);
+    formData.append("parent", parentDirId);
+
+    const response = await fetch(`${apiURL}/drive/dir`, {
+      method: "POST",
+      credentials: "include",
+      body: formData
+    });
+
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`);
+    }
+
+    const result = await response.json();
+
+    return result.success;
+  }
 }
 
 const driveClient = new DriveClient();

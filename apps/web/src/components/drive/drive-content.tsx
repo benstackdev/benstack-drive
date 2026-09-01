@@ -46,7 +46,7 @@ export function DriveContent() {
           dirs ? dirs.map((dir) => (
             <div key={dir.id}>
               <DriveDirectory directory={dir} />
-              <Separator />
+              <Separator className="mt-2" />
             </div>
           )) : null
         }
@@ -54,7 +54,7 @@ export function DriveContent() {
           files ? files.map((file) => (
             <div key={file.id}>
               <DriveFile file={file} />
-              <Separator />
+              <Separator className="mt-2" />
             </div>
           )) : null
         }
