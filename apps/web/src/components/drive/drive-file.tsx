@@ -3,6 +3,7 @@ import type { driveSchema } from "shared";
 import { File } from "lucide-react";
 import * as z from "zod";
 import { format } from "date-fns";
+import { parseFileSize } from "@/lib/parse-file-size";
 
 interface DriveFileProps extends HTMLAttributes<HTMLDivElement> {
   file: z.infer<typeof driveSchema.driveFile>;
@@ -17,8 +18,7 @@ export function DriveFile({ file, ...props }: DriveFileProps) {
       </div>
       <span className="text-gray-400">{format(new Date(file.modifiedAt), "yyyy/MM/dd")}</span>
       <span className="text-gray-400 hidden md:block">{format(new Date(file.createdAt), "yyyy/MM/dd")}</span>
-      {/* TODO: Fix this to be less gross */}
-      <span className="text-gray-400 hidden xl:block">{file.data.data.length}</span>
+      <span className="text-gray-400 hidden xl:block">{parseFileSize(file.data.data.length)}</span>
     </div>
   );
 }
