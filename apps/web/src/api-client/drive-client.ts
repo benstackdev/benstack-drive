@@ -1,5 +1,5 @@
 import * as z from "zod";
-import { driveSchema } from "shared";
+import { driveSchema, localStorageKeys } from "shared";
 import { apiURL } from "shared";
 
 type APIMethodType = "GET" | "POST" | "PUT" | "DELETE";
@@ -35,9 +35,10 @@ class DriveClient {
 
   async postNewFile(newFile: File) {
     const formData = new FormData();
+    const currentDir = JSON.parse(localStorage.getItem(localStorageKeys.CURRENT_DIR));
 
     formData.append("file", newFile);
-    formData.append("dir", "13312492-f592-44a0-a2e6-f809b48a0d64");
+    formData.append("dir", currentDir.id);
 
     const result = await apiFetch(new URL(`${apiURL}/drive`), "POST", formData);
 

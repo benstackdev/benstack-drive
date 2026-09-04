@@ -1,8 +1,8 @@
 export class Stack<T> {
   stack: T[];
 
-  constructor(items: T[] = []) {
-    this.stack = items;
+  constructor(items?: T[]) {
+    this.stack = items ?? [];
   }
 
   stackPush(item: T) {

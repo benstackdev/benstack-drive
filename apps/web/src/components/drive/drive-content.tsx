@@ -2,7 +2,7 @@ import driveClient from "@/api-client/drive-client";
 import { h1Styles } from "@/lib/styles/heading-styles";
 import { createContext, useEffect, useState } from "react";
 import * as z from "zod";
-import { driveSchema } from "shared";
+import { driveSchema, localStorageKeys } from "shared";
 import { DriveDirectory } from "./drive-directory";
 import { DriveFile } from "./drive-file";
 import { Separator } from "../ui/separator";
@@ -37,34 +37,58 @@ export function DriveContent() {
 
   const updateCurrentDirIdForward = (newDir: DirType) => {
     dirStack.stackPush(currentDir);
+    localStorage.setItem(localStorageKeys.DIR_STACK, JSON.stringify(dirStack));
+
     setCurrentDir(newDir);
     fetchData(newDir.id);
   };
 
   const updateCurrentDirIdBackward = () => {
     const parentDir = dirStack.stackPop();
+    localStorage.setItem(localStorageKeys.DIR_STACK, JSON.stringify(dirStack));
     if (!parentDir) return;
 
     setCurrentDir(parentDir);
     fetchData(parentDir.id);
   };
 
-  // set rootDirId
+  // on mount: set rootDirId and check if current_dir is in localStorage
   useEffect(() => {
-    const fetchRootId = async () => {
+    const fetchCurrentDir = async () => {
       const id = await driveClient.getRootId() as DirType["id"];
+      const _currentDir = JSON.parse(localStorage.getItem(localStorageKeys.CURRENT_DIR)) as DirType;
+
       setRootDirId(id);
-      updateCurrentDirIdForward({
+
+      /*
+        If the current directory is in local storage:
+          - set state of view to match and fetch data for that dir
+          - check if dir stack is defined in local storage and set dirStack state to match
+        Otherwise, just initialize drive view from root with updateCurrentDirIdForward with root dir object
+      */
+      if (_currentDir) {
+        setCurrentDir(_currentDir);
+        fetchData(_currentDir.id);
+
+        const _dirStack = JSON.parse(localStorage.getItem(localStorageKeys.DIR_STACK)).stack;
+        if (_dirStack) setDirStack(new Stack(_dirStack));
+      }
+      else updateCurrentDirIdForward({
         id,
         name: "Drive Root",
         parentId: "",
         createdAt: "",
         modifiedAt: ""
-      } as DirType);
+      });
     };
 
-    if (!rootDirId) fetchRootId();
+    if (!rootDirId) fetchCurrentDir();
   });
+
+  // set current dir in local storage
+  useEffect(() => {
+    if (currentDir) localStorage.setItem(localStorageKeys.CURRENT_DIR, JSON.stringify(currentDir));
+  }, [currentDir]);
 
   return (
     <>

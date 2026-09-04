@@ -5,6 +5,8 @@ import { Field, FieldGroup, FieldLabel } from "../ui/field";
 import { Input } from "../ui/input";
 import driveClient from "@/api-client/drive-client";
 import { useState, type ChangeEvent } from "react";
+import { localStorageKeys } from "shared";
+import type { DirType } from "../drive/drive-content";
 
 export function NewDirDialog() {
   const createDir = async (event: React.SubmitEvent) => {
@@ -13,11 +15,11 @@ export function NewDirDialog() {
       return;
     }
 
-    // ! Hard-coded parent directory name; need to change eventually
-    await driveClient.postNewDir(newDirName, "13312492-f592-44a0-a2e6-f809b48a0d64");
+    await driveClient.postNewDir(newDirName, JSON.parse(localStorage.getItem(localStorageKeys.CURRENT_DIR)).id);
   };
 
   const [newDirName, setNewDirName] = useState<string>("");
+  const [currentDir, setCurrentDir] = useState<DirType>(JSON.parse(localStorage.getItem(localStorageKeys.CURRENT_DIR)));
 
   return (
     <Dialog>
@@ -30,11 +32,12 @@ export function NewDirDialog() {
             New Directory
           </Button>
         } />
-      <DialogContent>
+      <DialogContent className="flex flex-col gap-y-4">
         <DialogHeader>
           <DialogTitle>Create New Directory</DialogTitle>
           <DialogDescription>
-            New directory will be created in the currently selected directory (temporary)
+            New directory will be created in:
+            <span className="font-bold"> {currentDir.name ?? null}</span>
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={createDir} className="flex flex-col gap-2">
