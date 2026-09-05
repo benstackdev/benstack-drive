@@ -40,7 +40,7 @@ export function NewDirDialog() {
             <span className="font-bold"> {currentDir.name ?? null}</span>
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={createDir} className="flex flex-col gap-2">
+        <form onSubmit={createDir} className="flex flex-col gap-4">
           <FieldGroup>
             <Field>
               <FieldLabel htmlFor="name">
