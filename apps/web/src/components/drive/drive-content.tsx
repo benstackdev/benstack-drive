@@ -103,15 +103,19 @@ export function DriveContent() {
           <h1 className={h1Styles}>{currentDir ? currentDir.name : null}</h1>
         </div>
         {/* Fetch files/directories */}
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2">
           {(dirs && dirs.length > 0) || (files && files.length) > 0 ?
             <>
-              <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 pb-2 border-b-2 gap-x-4">
-                <span className="text-gray-400 font-semibold">Name</span>
-                <span className="text-gray-400 font-semibold">Last Modified</span>
-                <span className="hidden md:block text-gray-400 font-semibold">Created</span>
-                <span className="hidden xl:block text-gray-400 font-semibold">Size</span>
+              <div className="flex flex-row">
+                <div className="flex-1 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-4">
+                  <span className="text-gray-400 font-semibold">Name</span>
+                  <span className="text-gray-400 font-semibold">Last Modified</span>
+                  <span className="hidden md:block text-gray-400 font-semibold">Created</span>
+                  <span className="hidden xl:block text-gray-400 font-semibold">Size</span>
+                </div>
+                <span className="justify-self-end px-4"></span>
               </div>
+              <Separator className="p-0.5" />
               {
                 dirs ? dirs.map((dir) => (
                   <div key={dir.id}>
