@@ -117,7 +117,7 @@ export const driveFileUpdatePut = async (c: Context) => {
     // check against updatedFile (will be defined if moved) to check no name conflict in directory file was moved to
     const newFileExists = await driveQuery.selectFileByName(user.id, updatedFile ? updatedFile.dirId : file.dirId, newName);
 
-    let newFileName = file.name;
+    let newFileName = newName;
 
     if (newFileExists) newFileName = await resolveFileDuplicateName(file.name, user.id, dirToId ?? file.dirId);
 

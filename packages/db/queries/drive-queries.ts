@@ -238,6 +238,8 @@ export const updateFileRename = async (
       ))
       .returning();
 
+    console.log(updatedFile);
+
     if (updatedFile[0] && updatedFile[0].name === newName) return updatedFile[0];
 
     return;

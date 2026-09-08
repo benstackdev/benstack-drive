@@ -1,6 +1,6 @@
 import driveClient from "@/api-client/drive-client";
 import { h1Styles } from "@/lib/styles/heading-styles";
-import { createContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import * as z from "zod";
 import { driveSchema, localStorageKeys } from "shared";
 import { DriveDirectory } from "./drive-directory";
@@ -10,15 +10,13 @@ import { Stack } from "@/lib/stack";
 import { Button } from "../ui/button";
 import { CircleArrowLeft } from "lucide-react";
 import { DriveDirectoryEmpty } from "./drive-dir-empty";
+import { DriveContentContext } from "@/contexts/drive-content-context";
 
 export type DirType = z.infer<typeof driveSchema.driveDir>;
 export type FileType = z.infer<typeof driveSchema.driveFile>;
 
 const compareDirs = (dir1: DirType, dir2: DirType): number => (dir1.name < dir2.name) ? -1 : 1;
 const compareFiles = (file1: FileType, file2: FileType): number => (file1.name < file2.name) ? -1 : 1;
-
-// Current Directory Context
-const CurrentDirContext = createContext<DirType | null>(null);
 
 export function DriveContent() {
   const [currentDir, setCurrentDir] = useState<DirType | null>(null);
@@ -92,7 +90,7 @@ export function DriveContent() {
 
   return (
     <>
-      <CurrentDirContext value={currentDir}>
+      <DriveContentContext value={{ currentDir, fetchData }}>
         <div className="flex py-2 gap-x-2 items-center">
           <Button
             variant="ghost"
@@ -136,7 +134,7 @@ export function DriveContent() {
             <DriveDirectoryEmpty />
           }
         </div>
-      </CurrentDirContext>
+      </DriveContentContext>
     </>
   );
 }
