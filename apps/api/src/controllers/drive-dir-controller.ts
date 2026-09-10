@@ -3,6 +3,7 @@ import { driveQuery } from "db";
 import { HTTPException } from "hono/http-exception";
 import { success } from "zod";
 import { resolveDirDuplicateName } from "../utils/resolve-dir-duplicate-name.js";
+import { checkDirSelfReference } from "../utils/check-dir-self-reference.js";
 
 export const driveDirRootGet = async (c: Context) => {
   const user = c.get("user");
@@ -112,6 +113,12 @@ export const driveDirUpdatePut = async (c: Context) => {
 
     if (dirCollision) {
       return c.json({ success: false, message: `There is already a directory with the name '${dir.name}' in '${dirToExists.name}'` });
+    }
+
+    const isSelfReference = await checkDirSelfReference(user.id, dir.id, dirToId);
+
+    if (isSelfReference) {
+      return c.json({ success: false, message: `Cannot move directory inside itself; circular reference.` });
     }
 
     updatedDir = await driveQuery.updateDirMove(user.id, dirId, dirToId);
