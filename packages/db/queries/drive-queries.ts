@@ -241,8 +241,29 @@ export const updateFileRename = async (
     console.log(updatedFile);
 
     if (updatedFile[0] && updatedFile[0].name === newName) return updatedFile[0];
+  } catch (error) {
+    throw error;
+  }
+};
 
-    return;
+export const updateFileTrash = async (
+  userId: UserType["id"],
+  id: FileEntityType["id"],
+  status: boolean
+) => {
+  try {
+    if (!id) return;
+
+    const updatedFile = await db.update(FileEntity)
+      .set({ isTrash: status })
+      .where(and(
+        eq(FileEntity.userId, userId),
+        eq(FileEntity.id, id)
+      ))
+      .returning();
+
+    if (updatedFile[0] && updatedFile[0].isTrash === status) return updatedFile[0];
+
   } catch (error) {
     throw error;
   }
@@ -283,6 +304,28 @@ export const updateDirRename = async (
 
     const updatedDir = await db.update(DirectoryEntity)
       .set({ name: newName, modifiedAt: sql`now()` })
+      .where(and(
+        eq(DirectoryEntity.userId, userId),
+        eq(DirectoryEntity.id, id)
+      ))
+      .returning();
+
+    if (updatedDir[0]) return updatedDir[0];
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updateDirTrash = async (
+  userId: UserIdType,
+  id: DirectoryEntityType["id"],
+  status: boolean
+) => {
+  try {
+    if (!id) return;
+
+    const updatedDir = await db.update(DirectoryEntity)
+      .set({ isTrash: status })
       .where(and(
         eq(DirectoryEntity.userId, userId),
         eq(DirectoryEntity.id, id)

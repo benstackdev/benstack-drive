@@ -1,0 +1,1 @@
+ALTER TABLE "directory_entity" ADD COLUMN "is_trash" boolean DEFAULT false;

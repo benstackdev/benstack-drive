@@ -91,6 +91,7 @@ export const driveDirUpdatePut = async (c: Context) => {
   const dirId = c.req.param("dirId");
   const dirToId = c.req.query("dirToId");
   const newName = c.req.query("newName");
+  const trash = c.req.query("trash");
 
   if (!dirId) return c.json({ success: false, message: "No directory to move given." });
 
@@ -100,7 +101,7 @@ export const driveDirUpdatePut = async (c: Context) => {
   if (!dir) return c.json({ success: false, message: "Directory to move cannot be found." });
   if (dir.isRoot) return c.json({ success: false, message: "Cannot modifiy the root directory." });
 
-  if (!dirToId && !newName) return c.json({ success: false, message: "Nothing to update." });
+  if (!dirToId && !newName && !trash) return c.json({ success: false, message: "Nothing to update." });
 
   let updatedDir: typeof dir | undefined;
 
@@ -130,6 +131,14 @@ export const driveDirUpdatePut = async (c: Context) => {
     if (dirNewNameExists && dirNewNameExists.parentId === dir.parentId) return c.json({ success: false, message: `Directory with name ${newName} in this directory already exists` });
 
     updatedDir = await driveQuery.updateDirRename(user.id, dir.id, newName);
+  }
+
+  if (trash === "true" || trash === "false") {
+    if (dir.isRoot) return c.json({ success: false, message: "Cannot trash root directory." });
+
+    updatedDir = await driveQuery.updateDirTrash(user.id, dir.id, (trash === "true"));
+  } else {
+    return c.json({ success: false, message: "\'trash\' query expects boolean value" });
   }
 
   if (updatedDir) return c.json({ success: true, data: updatedDir });

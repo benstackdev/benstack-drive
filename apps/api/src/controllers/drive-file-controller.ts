@@ -81,6 +81,7 @@ export const driveFileUpdatePut = async (c: Context) => {
   const fileId = c.req.param('fileId');
   const dirToId = c.req.query("dirToId");
   const newName = c.req.query("newName");
+  const trash = c.req.query("trash");
 
   const file = await driveQuery.selectFileById(user.id, fileId);
 
@@ -90,7 +91,7 @@ export const driveFileUpdatePut = async (c: Context) => {
 
   // The request needs to have at least one of these defined (either for renaming file XOR moving file)
 
-  if (!dirToId && !newName) return c.json({ success: false, message: "Nothing to update." });
+  if (!dirToId && !newName && !trash) return c.json({ success: false, message: "Nothing to update." });
 
   let updatedFile: typeof file | undefined;
 
@@ -124,6 +125,12 @@ export const driveFileUpdatePut = async (c: Context) => {
     updatedFile = await driveQuery.updateFileRename(user.id, file.id, newFileName);
 
     if (!updatedFile) return c.json({ success: false, message: "File could not be renamed." });
+  }
+
+  if (trash === "true" || trash === "false") {
+    updatedFile = await driveQuery.updateFileTrash(user.id, file.id, (trash === "true"));
+  } else {
+    return c.json({ success: false, message: "\'trash\' query expects boolean value (true or false)" });
   }
 
   if (typeof updatedFile === typeof file) return c.json({ success: true, data: updatedFile });
