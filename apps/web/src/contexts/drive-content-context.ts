@@ -1,9 +1,11 @@
-import type { DirType } from "@/components/drive/drive-content";
+import type { DirType, FileType } from "@/components/drive/drive-content";
 import { createContext } from "react";
 
 // Current Directory Context
 export type DriveContentContextType = {
   currentDir: DirType,
+  moveDriveEntry: FileType | DirType | null,
+  moveDriveEntryUpdate: (entry: FileType | DirType, toMove?: boolean) => void,
   fetchData: (dirId: DirType["id"]) => Promise<void>;
 };
 

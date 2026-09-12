@@ -20,9 +20,9 @@ export function DriveFile({ file, ...props }: DriveFileProps) {
             <File className="shrink-0" />
             <span className="truncate">{file.name}</span>
           </div>
-          <span className="text-gray-400">{format(new Date(file.modifiedAt), "yyyy/MM/dd")}</span>
-          <span className="text-gray-400 hidden md:block">{format(new Date(file.createdAt), "yyyy/MM/dd")}</span>
-          <span className="text-gray-400 hidden xl:block">{parseFileSize(file.data.data.length)}</span>
+          <span className="text-gray-400 justify-self-center">{format(new Date(file.modifiedAt), "yyyy/MM/dd")}</span>
+          <span className="text-gray-400 hidden md:block justify-self-center">{format(new Date(file.createdAt), "yyyy/MM/dd")}</span>
+          <span className="text-gray-400 hidden xl:block justify-self-center">{parseFileSize(file.data.data.length)}</span>
         </div>
         <span className="justify-self-end">
           <DriveActions />

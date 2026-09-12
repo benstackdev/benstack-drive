@@ -6,7 +6,7 @@ import { Input } from "../ui/input";
 import driveClient from "@/api-client/drive-client";
 import { DriveContentContext } from "@/contexts/drive-content-context";
 
-export function DriveActionRename() {
+export function DriveActionRename({ hide }: { hide: () => void; }) {
   const driveEntry = useContext(DriveEntryContext);
   const { currentDir, fetchData } = useContext(DriveContentContext);
   const [newName, setNewName] = useState<string>(driveEntry.entry.name);
@@ -19,6 +19,8 @@ export function DriveActionRename() {
       await driveClient.putDirRename(driveEntry.entry.id, newName);
     }
     fetchData(currentDir.id);
+
+    hide();
   };
 
   return (

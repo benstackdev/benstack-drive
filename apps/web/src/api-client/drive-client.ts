@@ -62,8 +62,20 @@ class DriveClient {
     return result.success;
   }
 
+  async putFileMove(fileId: z.infer<typeof z.uuid>, dirTo: z.infer<typeof z.uuid>) {
+    const result = await apiFetch(new URL(`${apiURL}/drive/${fileId}?dirToId=${dirTo}`), "PUT");
+
+    return result.success;
+  }
+
   async putDirRename(dirId: z.infer<typeof z.uuid>, newName: string) {
     const result = await apiFetch(new URL(`${apiURL}/drive/dir/${dirId}?newName=${newName}`), "PUT");
+
+    return result.success;
+  }
+
+  async putDirMove(dirId: z.infer<typeof z.uuid>, dirTo: z.infer<typeof z.uuid>) {
+    const result = await apiFetch(new URL(`${apiURL}/drive/dir/${dirId}?dirToId=${dirTo}`), "PUT");
 
     return result.success;
   }

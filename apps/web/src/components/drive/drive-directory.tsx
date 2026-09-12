@@ -11,25 +11,26 @@ import { DriveEntryContext } from "@/contexts/drive-entry-context";
 interface DriveDirectoryProps extends HTMLAttributes<HTMLDivElement> {
   directory: z.infer<typeof driveSchema.driveDir>;
   updateDir: (newDir: DirType) => void;
+  isMoving: boolean;
 }
 
-export function DriveDirectory({ directory, updateDir }: DriveDirectoryProps) {
+export function DriveDirectory({ directory, updateDir, isMoving }: DriveDirectoryProps) {
   return (
     <DriveEntryContext value={{ type: "Dir", entry: directory }}>
-      <div className="flex flex-row">
+      <div className={`flex flex-row items-center ${isMoving ? "opacity-50" : ""}`}>
         <div className="flex-1 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-4">
           <div className="flex items-center gap-4">
             <Folder className="text-blue-400 shrink-0" />
             <Button
               variant="ghost"
               className="truncate p-0 m-0 text-md border-none h-6"
-              onClick={() => updateDir(directory)}>
+              onClick={() => { if (!isMoving) updateDir(directory); }}>
               {directory.name}
             </Button>
           </div>
-          <span className="text-gray-400">{format(new Date(directory.modifiedAt), "yyyy/MM/dd")}</span>
-          <span className="hidden md:block text-gray-400">{format(new Date(directory.createdAt), "yyyy/MM/dd")}</span>
-          <span className="hidden xl:block text-gray-400"><Minus /></span>
+          <span className="text-gray-400 justify-self-center">{format(new Date(directory.modifiedAt), "yyyy/MM/dd")}</span>
+          <span className="hidden md:block text-gray-400 justify-self-center">{format(new Date(directory.createdAt), "yyyy/MM/dd")}</span>
+          <span className="hidden xl:block text-gray-400 justify-self-center"><Minus /></span>
         </div>
         <span className="justify-self-end">
           <DriveActions />

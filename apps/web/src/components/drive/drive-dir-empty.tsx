@@ -10,7 +10,7 @@ export function DriveDirectoryEmpty() {
         <EmptyMedia variant="icon">
           <FolderOpen />
         </EmptyMedia>
-        <EmptyTitle>This folder is empty</EmptyTitle>
+        <EmptyTitle>This directory is empty</EmptyTitle>
       </EmptyHeader>
       <EmptyContent className="flex gap-x-2">
         <NewFileDialog />

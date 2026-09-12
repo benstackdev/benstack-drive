@@ -11,6 +11,8 @@ import { Button } from "../ui/button";
 import { CircleArrowLeft } from "lucide-react";
 import { DriveDirectoryEmpty } from "./drive-dir-empty";
 import { DriveContentContext } from "@/contexts/drive-content-context";
+import { DriveActionMove } from "./drive-action-move";
+import { cn } from "@/lib/utils";
 
 export type DirType = z.infer<typeof driveSchema.driveDir>;
 export type FileType = z.infer<typeof driveSchema.driveFile>;
@@ -26,6 +28,8 @@ export function DriveContent() {
 
   const [dirs, setDirs] = useState<DirType[] | null>(null);
   const [files, setFiles] = useState<FileType[] | null>(null);
+
+  const [moveDriveEntry, setMoveDriveEntry] = useState<FileType | DirType | null>(null);
 
   const fetchData = async (dirId: DirType["id"]) => {
     const rawData = await driveClient.getDirContent(dirId);
@@ -88,9 +92,28 @@ export function DriveContent() {
     if (currentDir) localStorage.setItem(localStorageKeys.CURRENT_DIR, JSON.stringify(currentDir));
   }, [currentDir]);
 
+  const moveDriveEntryUpdate = async (entry: FileType | DirType, toMove: boolean = false) => {
+    if (!toMove) {
+      setMoveDriveEntry(entry);
+      return;
+    }
+
+    // if moving (toMove): make call to move file and close DriveActionMove (set state of driveEntryMoving to null)
+
+    // move according to entry type
+    if ("data" in entry) {
+      await driveClient.putFileMove(entry.id, currentDir.id);
+    } else {
+      await driveClient.putDirMove(entry.id, currentDir.id);
+    }
+
+    fetchData(currentDir.id);
+    setMoveDriveEntry(null);
+  };
+
   return (
     <>
-      <DriveContentContext value={{ currentDir, fetchData }}>
+      <DriveContentContext value={{ currentDir, fetchData, moveDriveEntry, moveDriveEntryUpdate }}>
         <div className="flex py-2 gap-x-2 items-center">
           <Button
             variant="ghost"
@@ -107,9 +130,9 @@ export function DriveContent() {
               <div className="flex flex-row">
                 <div className="flex-1 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-4">
                   <span className="text-gray-400 font-semibold">Name</span>
-                  <span className="text-gray-400 font-semibold">Last Modified</span>
-                  <span className="hidden md:block text-gray-400 font-semibold">Created</span>
-                  <span className="hidden xl:block text-gray-400 font-semibold">Size</span>
+                  <span className="text-gray-400 font-semibold justify-self-center">Last Modified</span>
+                  <span className="hidden md:block text-gray-400 font-semibold justify-self-center">Created</span>
+                  <span className="hidden xl:block text-gray-400 font-semibold justify-self-center">Size</span>
                 </div>
                 <span className="justify-self-end px-4"></span>
               </div>
@@ -117,7 +140,10 @@ export function DriveContent() {
               {
                 dirs ? dirs.map((dir) => (
                   <div key={dir.id}>
-                    <DriveDirectory directory={dir} updateDir={updateCurrentDirIdForward} />
+                    <DriveDirectory
+                      directory={dir}
+                      updateDir={updateCurrentDirIdForward}
+                      isMoving={moveDriveEntry && dir.id === moveDriveEntry.id} />
                     <Separator className="mt-2" />
                   </div>
                 )) : null
@@ -133,6 +159,11 @@ export function DriveContent() {
             </> :
             <DriveDirectoryEmpty />
           }
+          <DriveActionMove visible={(moveDriveEntry !== null)} />
+          <div className={cn(
+            (moveDriveEntry !== null) ? "pb-42" : "pb-0"
+          )}></div>
+          {/* <span>{`moveDriveEntry: ${(moveDriveEntry !== null)}`}</span> */}
         </div>
       </DriveContentContext>
     </>
