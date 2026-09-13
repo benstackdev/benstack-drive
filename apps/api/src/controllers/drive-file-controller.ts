@@ -52,10 +52,16 @@ export const driveFileGet = async (c: Context) => {
 
   const user = c.get("user");
 
-  const files = await driveQuery.selectAllFilesInDir(user.id, dirId);
-  const subDirs = await driveQuery.selectAllDirsInDir(user.id, dirId);
+  let files = await driveQuery.selectAllFilesInDir(user.id, dirId);
+  let subDirs = await driveQuery.selectAllDirsInDir(user.id, dirId);
 
   if (files) {
+    files = files.filter((file) => !file.isTrash);
+    subDirs = subDirs?.filter((subDir) => !subDir.isTrash);
+
+    console.log(files);
+    console.log(subDirs);
+
     if (fileName) {
       const queriedFile = files.filter((file) => file.name === fileName);
       return c.json({
