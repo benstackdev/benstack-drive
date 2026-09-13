@@ -72,6 +72,21 @@ export const driveFileGet = async (c: Context) => {
   }
 };
 
+export const driveFileTrashGet = async (c: Context) => {
+  const user = c.get("user");
+  if (!user) {
+    throw new HTTPException(401, { message: "Unauthorized request" });
+  }
+
+  const trashedFiles = await driveQuery.selectAllFilesInTrash(user.id);
+
+  if (trashedFiles.length > 0) {
+    return c.json({ success: true, data: trashedFiles });
+  }
+
+  return c.json({ success: false, message: "No files in trash" });
+};
+
 export const driveFileUpdatePut = async (c: Context) => {
   const user = c.get("user");
   if (!user) {

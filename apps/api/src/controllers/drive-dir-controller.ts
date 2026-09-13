@@ -21,6 +21,21 @@ export const driveDirRootGet = async (c: Context) => {
   }
 };
 
+export const driveDirTrashGet = async (c: Context) => {
+  const user = c.get("user");
+  if (!user) {
+    throw new HTTPException(401, { message: "Unauthorized request" });
+  }
+
+  const trashedDirs = await driveQuery.selectAllDirsInTrash(user.id);
+
+  if (trashedDirs.length > 0) {
+    return c.json({ success: true, data: trashedDirs });
+  }
+
+  return c.json({ sucess: false, message: "No directories in trash." });
+};
+
 export const driveNewDirPost = async (c: Context) => {
   const body = await c.req.parseBody();
   const parentId = body['parent'];

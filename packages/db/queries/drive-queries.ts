@@ -124,6 +124,23 @@ export const selectAllFilesInDir = async (
   }
 };
 
+export const selectAllFilesInTrash = async (
+  userId: UserIdType
+) => {
+  try {
+    const files = await db.select()
+      .from(FileEntity)
+      .where(and(
+        eq(FileEntity.userId, userId),
+        eq(FileEntity.isTrash, true)
+      ));
+
+    return files;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const selectDirById = async (
   userId: UserIdType,
   id: DirectoryEntityType["id"]
@@ -198,6 +215,23 @@ export const selectAllDirsInDir = async (
   }
 };
 
+export const selectAllDirsInTrash = async (
+  userId: UserIdType
+) => {
+  try {
+    const dirs = await db.select()
+      .from(DirectoryEntity)
+      .where(and(
+        eq(DirectoryEntity.userId, userId),
+        eq(DirectoryEntity.isTrash, true)
+      ));
+
+    return dirs;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const updateFileMove = async (
   userId: UserIdType,
   id: FileEntityType["id"],
@@ -254,8 +288,13 @@ export const updateFileTrash = async (
   try {
     if (!id) return;
 
+    let currentDate = new Date();
+    currentDate.setDate(currentDate.getDate() + 30); // set expiry
+
+    const expiresAt = (status) ? currentDate : null;
+
     const updatedFile = await db.update(FileEntity)
-      .set({ isTrash: status })
+      .set({ isTrash: status, expiresAt, modifiedAt: sql`now()` })
       .where(and(
         eq(FileEntity.userId, userId),
         eq(FileEntity.id, id)
@@ -324,8 +363,13 @@ export const updateDirTrash = async (
   try {
     if (!id) return;
 
+    let currentDate = new Date(Date.now());
+    currentDate.setDate(currentDate.getDate() + 30); // set expiry
+
+    const expiresAt = (status) ? currentDate : null;
+
     const updatedDir = await db.update(DirectoryEntity)
-      .set({ isTrash: status })
+      .set({ isTrash: status, expiresAt, modifiedAt: sql`now()` })
       .where(and(
         eq(DirectoryEntity.userId, userId),
         eq(DirectoryEntity.id, id)

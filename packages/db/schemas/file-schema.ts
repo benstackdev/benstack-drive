@@ -12,6 +12,7 @@ export const FileEntity = pgTable("file_entity", {
   name: text("name").notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   modifiedAt: timestamp("modified_at").notNull().defaultNow(),
+  expiresAt: timestamp("expires_at"),
   isStarred: boolean("is_starred").default(false),
   isTrash: boolean("is_trash").default(false)
 });

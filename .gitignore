@@ -30,3 +30,6 @@ vite.config.ts.timestamp-*
 
 # Optional ESLint cache
 .eslintcache
+
+# shared package
+./packages/shared/src

@@ -9,5 +9,6 @@ export const DirectoryEntity = pgTable("directory_entity", {
   parentId: uuid("parent_id").references((): AnyPgColumn => DirectoryEntity.id, { onDelete: "cascade" }),
   isTrash: boolean("is_trash").default(false),
   createdAt: timestamp("created_at").notNull().defaultNow(),
-  modifiedAt: timestamp("modified_at").notNull().defaultNow()
+  modifiedAt: timestamp("modified_at").notNull().defaultNow(),
+  expiresAt: timestamp("expires_at")
 });
