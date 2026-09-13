@@ -59,9 +59,6 @@ export const driveFileGet = async (c: Context) => {
     files = files.filter((file) => !file.isTrash);
     subDirs = subDirs?.filter((subDir) => !subDir.isTrash);
 
-    console.log(files);
-    console.log(subDirs);
-
     if (fileName) {
       const queriedFile = files.filter((file) => file.name === fileName);
       return c.json({
