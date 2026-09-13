@@ -6,7 +6,7 @@ import { Input } from "../ui/input";
 import driveClient from "@/api-client/drive-client";
 import { useState, type ChangeEvent } from "react";
 import { localStorageKeys } from "shared";
-import type { DirType } from "../drive/drive-content";
+import type { DirType } from "../drive/views/drive-content";
 
 export function NewDirDialog() {
   const createDir = async (event: React.SubmitEvent) => {

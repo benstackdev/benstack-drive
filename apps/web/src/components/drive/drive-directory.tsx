@@ -3,9 +3,9 @@ import { type HTMLAttributes } from "react";
 import type { driveSchema } from "shared";
 import * as z from "zod";
 import { format } from "date-fns";
-import type { DirType } from "./drive-content";
+import type { DirType } from "./views/drive-content";
 import { Button } from "../ui/button";
-import { DriveActions } from "./drive-actions";
+import { DriveActions } from "./actions/drive-actions";
 import { DriveEntryContext } from "@/contexts/drive-entry-context";
 
 interface DriveDirectoryProps extends HTMLAttributes<HTMLDivElement> {

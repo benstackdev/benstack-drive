@@ -5,7 +5,7 @@ import { Field, FieldDescription, FieldGroup } from "../ui/field";
 import { Input } from "../ui/input";
 import driveClient from "@/api-client/drive-client";
 import { useRef, useState } from "react";
-import type { DirType } from "../drive/drive-content";
+import type { DirType } from "../drive/views/drive-content";
 import { localStorageKeys } from "shared";
 
 export function NewFileDialog() {

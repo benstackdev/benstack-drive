@@ -1,8 +1,8 @@
 import { useContext, useState } from "react";
-import { Button } from "../ui/button";
-import { DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
+import { Button } from "@/components/ui/button";
+import { DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { DriveEntryContext } from "@/contexts/drive-entry-context";
-import { Input } from "../ui/input";
+import { Input } from "@/components/ui/input";
 import driveClient from "@/api-client/drive-client";
 import { DriveContentContext } from "@/contexts/drive-content-context";
 

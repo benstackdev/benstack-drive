@@ -4,7 +4,7 @@ import { File } from "lucide-react";
 import * as z from "zod";
 import { format } from "date-fns";
 import { parseFileSize } from "@/lib/parse-file-size";
-import { DriveActions } from "./drive-actions";
+import { DriveActions } from "./actions/drive-actions";
 import { DriveEntryContext } from "@/contexts/drive-entry-context";
 
 interface DriveFileProps extends HTMLAttributes<HTMLDivElement> {

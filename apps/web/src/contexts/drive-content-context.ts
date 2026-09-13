@@ -1,4 +1,4 @@
-import type { DirType, FileType } from "@/components/drive/drive-content";
+import type { DirType, FileType } from "@/components/drive/views/drive-content";
 import { createContext } from "react";
 
 // Current Directory Context

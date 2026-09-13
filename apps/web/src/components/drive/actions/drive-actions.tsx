@@ -1,9 +1,9 @@
 import { EllipsisVertical } from "lucide-react";
-import { Button } from "../ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "../ui/dropdown-menu";
+import { Button } from "../../ui/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "../../ui/dropdown-menu";
 import { DriveActionRename } from "./drive-action-rename";
 import { useContext, useState, type JSX } from "react";
-import { Dialog, DialogTrigger } from "../ui/dialog";
+import { Dialog, DialogTrigger } from "../../ui/dialog";
 import { DriveContentContext } from "@/contexts/drive-content-context";
 import { DriveEntryContext } from "@/contexts/drive-entry-context";
 import { DriveActionDelete } from "./drive-action-delete";
