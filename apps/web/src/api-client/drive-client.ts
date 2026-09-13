@@ -33,6 +33,13 @@ class DriveClient {
     return data;
   }
 
+  async getTrash() {
+    const trashedDirs = await apiFetch(new URL(`${apiURL}/drive/dir/trash`), "GET");
+    const trashedFiles = await apiFetch(new URL(`${apiURL}/drive/trash`), "GET");
+
+    return { trashedDirs, trashedFiles };
+  }
+
   async postNewFile(newFile: File) {
     const formData = new FormData();
     const currentDir = JSON.parse(localStorage.getItem(localStorageKeys.CURRENT_DIR));
